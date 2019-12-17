@@ -13,22 +13,20 @@ public class MessageDb {
         values.put(MessageContract.COL_TEXT, name);
         values.put(MessageContract.COL_DATETIME, dateTime);
 
-
         return sql_db.insert(MessageContract.BD_TABLE, null, values);
     }
 
-    public static void readLast(){
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+    public static Cursor readAll(MessageDbOpener messageDbOpener){
+        SQLiteDatabase db = messageDbOpener.getReadableDatabase();
         String[] projection = {MessageContract.COL_ID, MessageContract.COL_TEXT, MessageContract.COL_DATETIME};
 
+        String selection = null; //MessageContract.COL_TEXT+ " = ?";
+        String[] selectionArgs = null; //{""};
+        String sortOrder = null; //MessageContract.COL_TEXT + " DESC";
 
-        String selection = MessageContract.COL_TEXT+ " = ?";
-        String[] selectionArgs = {""};
-        String sortOrder = FeedEntry.COLUMN_NAME_SUBTITLE + " DESC";
-
-        Cursor cursor = db.query(
-                MessageContract.TABLE_NAME,   // The table to query
+        return db.query(
+                MessageContract.BD_NAME,   // The table to query
                 projection,             // The array of columns to return (pass null to get all)
                 selection,              // The columns for the WHERE clause
                 selectionArgs,          // The values for the WHERE clause
@@ -36,6 +34,17 @@ public class MessageDb {
                 null,                   // don't filter by row groups
                 sortOrder               // The sort order
         );
+    }
+
+    public static Cursor readLastFive(MessageDbOpener messageDbOpener){
+        SQLiteDatabase db = messageDbOpener.getReadableDatabase();
+        String[] projection = {MessageContract.COL_ID, MessageContract.COL_TEXT, MessageContract.COL_DATETIME};
+
+        String selection = null; //MessageContract.COL_TEXT+ " = ?";
+        String[] selectionArgs = null; //{""};
+        String sortOrder = MessageContract.COL_ID + " DESC";
+
+        return db.rawQuery("SELECT TOP 5 * FROM  "+ MessageContract.BD_TABLE, null);
 
     }
 }

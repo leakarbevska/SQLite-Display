@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class MessageContract {
     private MessageDbOpener db;
-    private static final String BD_NAME = "tp2.db";
+    public static final String BD_NAME = "tp2.db";
     private static final int BD_VERSION = 1;
 
     public static final String BD_TABLE = "tp2";
