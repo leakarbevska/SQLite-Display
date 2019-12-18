@@ -4,7 +4,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     Button   button_save;
 
     MessageDbOpener messageDbOpener;
-    MessageContract messageContract;
     Cursor cursor;
     ListView listView;
 
@@ -36,10 +38,27 @@ public class MainActivity extends AppCompatActivity {
         listView    = (ListView)findViewById(R.id.list_insert);
         text_item   = (TextView) findViewById(R.id.text_item);
 
+        this.messageDbOpener = new MessageDbOpener(this, MessageContract.BD_NAME, null, MessageContract.BD_VERSION);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext(), "selected Item Name is " + text_item.getText(), Toast.LENGTH_LONG).show();
+
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.item_details_toast,
+                        (ViewGroup) findViewById(R.id.parent));
+
+                TextView text_id = (TextView) layout.findViewById(R.id.text_itemID);
+                TextView text_date = (TextView) layout.findViewById(R.id.text_itemDate);
+                TextView text_text = (TextView) layout.findViewById(R.id.text_itemText);
+                text_id.setText("This is a custom toast");
+
+                Toast toast = new Toast(getApplicationContext());
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
+                toast.show();
             }
         });
 
@@ -57,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         printToast(id);
+        cleanInputText();
     }
 
     public void printLastMessages(View v){
@@ -72,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void cleanInputText(){
+        this.text_insert.setText("");
+    }
+
     public void printList(){
         Cursor cursor = MessageDb.readLastFive(this.messageDbOpener);
         SimpleCursorAdapter adapter =  new SimpleCursorAdapter(this,
@@ -81,22 +105,4 @@ public class MainActivity extends AppCompatActivity {
                 new int[] { android.R.id.text1 });
     }
 
-    public String[] makeArrayOfFiveLastItems(){
-        String text;
-        Date date;
-        String[] arrayItems = new String[5];
-
-        int indexText = cursor.getColumnIndex(MessageContract.COL_TEXT);
-        int indexDateTime = cursor.getColumnIndex(MessageContract.COL_DATETIME);
-        int i = 0;
-
-        while(cursor.moveToNext() || i < 5){
-            text = cursor.getString(indexText);
-            date = new Date(cursor.getLong(indexDateTime));
-            arrayItems[i] = text+" "+date.toString();
-            i++;
-        }
-
-        return arrayItems;
-    }
 }

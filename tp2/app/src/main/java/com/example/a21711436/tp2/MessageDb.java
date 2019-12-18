@@ -44,7 +44,7 @@ public class MessageDb {
         String[] selectionArgs = null; //{""};
         String sortOrder = MessageContract.COL_ID + " DESC";
 
-        return db.rawQuery("SELECT TOP 5 * FROM  "+ MessageContract.BD_TABLE, null);
+        return db.rawQuery("SELECT * FROM  "+ MessageContract.BD_TABLE+" ORDER BY "+MessageContract.COL_ID+" DESC LIMIT 5", null);
 
     }
 }
