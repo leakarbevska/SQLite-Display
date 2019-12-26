@@ -10,6 +10,7 @@ public class MessageDb {
         SQLiteDatabase sql_db = db.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(MessageContract.COL_ID,System.currentTimeMillis());
         values.put(MessageContract.COL_TEXT, name);
         values.put(MessageContract.COL_DATETIME, dateTime);
 

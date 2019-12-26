@@ -7,10 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MessageDbOpener extends SQLiteOpenHelper {
     private static final String BD_CREATE = "CREATE TABLE tp2 " +
-                                "( "+MessageContract.COL_ID+" INT NOT NULL,"+
+                                "( "+MessageContract.COL_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
                                     MessageContract.COL_TEXT +" VARCHAR(255),"+
-                                    MessageContract.COL_DATETIME+" VARCHAR(255),"+
-                                    "PRIMARY KEY ("+MessageContract.COL_ID+")"+
+                                    MessageContract.COL_DATETIME+" VARCHAR(255)"+
                                 ");";
 
     public MessageDbOpener(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){

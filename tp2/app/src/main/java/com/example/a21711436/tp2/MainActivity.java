@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 cursor,
                 new String[] { MessageContract.COL_TEXT},
                 new int[] { android.R.id.text1 });
+        listView.setAdapter(adapter);
     }
 
 }
